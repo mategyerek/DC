@@ -20,9 +20,12 @@ usbPort = "editMe"      # Your USB port, obtain using port_scan()
 rawFileName = "raw"
 dataFileName = "output"
 
+def calcDist(tof):
+    return 0.5*299792458*tof/1000
+
 def parse(line):
     row = line.split(" ")
-    return [row[1], row[3]]
+    return [row[1], calcDist(float(row[3]))]
 
 
 try:
@@ -49,7 +52,7 @@ if dev:
     # creating a csv writer object 
     csvwriter = csv.writer(csvfile)
 
-    fields = ['load_cell', 'time_of_flight']
+    fields = ['load_cell', 'Distance(meters)']
     csvwriter.writerow(fields)
     while running:
         # Delay 1 second
