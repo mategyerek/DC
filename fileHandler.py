@@ -1,5 +1,6 @@
 import os
 import re
+import csv
 
 
 def initWrite(overwrite, basename):
@@ -17,5 +18,5 @@ def initWrite(overwrite, basename):
         name = f"{basename}{maxnumber+1}"
     rawfile = open(name, 'w')
     csvfile = open(name, 'w')
-    csvwriter = csvfile.writer(csvfile)
-    return rawfile, csvfile
+    csvwriter = csv.writer(csvfile)
+    return rawfile, csvwriter
