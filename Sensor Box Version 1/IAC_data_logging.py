@@ -9,15 +9,29 @@ You can enable a "development" mode which will feed fake data
 """
 import time
 import serial
+import csv
+import os
 import time
 from IAC_helper import port_scan, development_data
 from fileHandler import initWrite
 
 time0_set = False
 callibrated = False
+kgperr = 0
+r0 = 0
+testload = 0
 dev = True              # Development mode
 usbPort = "editMe"      # Your USB port, obtain using port_scan()
 
+def convertedLoad(line):
+    if callibrated == False:
+        if input("press 1 when no load is applied") == 1:
+            r0 = parse(line)[0]
+            testload = input("Apply load to sensor and enter how much (N).")
+            callibrated = True
+    kgperr = testload / (parse(line)[0] - r0)
+    return [kgperr-r0 , parse(line)[1]]
+           
 
 def calcDist(tof):
     return 0.5*299792458*tof/1000
@@ -26,12 +40,8 @@ def parse(line):
     row = line.split(" ")
     return [row[1], calcDist(float(row[3]))]
 
-<<<<<<< Updated upstream
 
 raw, csvwriter = initWrite(dev, "output")
-
-=======
->>>>>>> Stashed changes
 try:
     if not dev:
         ser = serial.Serial(usbPort, 9600)
@@ -43,6 +53,8 @@ except:
 
 if dev:
     currentTime = time.time()
+
+ 
 
     fields = ['load_cell', 'Distance(meters)']
     csvwriter.writerow(fields)
@@ -59,24 +71,22 @@ if dev:
             time0_set = True
         line += str(' time: ')
         line += str(time.time() - time0)
-        print(line)
+        print(convertedLoad(line))
     
         raw.write(f"{line}\n")
-        csvwriter.writerow(parse(line))
+        csvwriter.writerow(convertedLoad(line))
         
 
 else:
     while running:
         line = ser.readline()[:-2].decode('utf-8')
-        if callibrated ==False:
-            pass
         if time0_set == False:
             time0 = time.time()
             time0_set = True
         line += str(' time: ')
         line += str(time.time() - time0)
-        print(line)
-        
+        print(convertedLoad(line))
+        csvwriter.writerow(convertedLoad(line))
         
         ####################
         ###YOUR CODE HERE###
