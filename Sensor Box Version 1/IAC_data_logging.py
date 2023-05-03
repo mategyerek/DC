@@ -7,12 +7,14 @@ This program is used to load the data from the USB serial.
 You can enable a "development" mode which will feed fake data 
  by setting dev = True
 """
-
+import time
 import serial
 import time
 from IAC_helper import port_scan, development_data
 from fileHandler import initWrite
 
+time0_set = False
+callibrated = False
 dev = True              # Development mode
 usbPort = "editMe"      # Your USB port, obtain using port_scan()
 
@@ -24,9 +26,12 @@ def parse(line):
     row = line.split(" ")
     return [row[1], calcDist(float(row[3]))]
 
+<<<<<<< Updated upstream
 
 raw, csvwriter = initWrite(dev, "output")
 
+=======
+>>>>>>> Stashed changes
 try:
     if not dev:
         ser = serial.Serial(usbPort, 9600)
@@ -49,6 +54,11 @@ if dev:
 
         currentTime = time.time()
         line = development_data()[:-2].decode('utf-8')
+        if time0_set == False:
+            time0 = time.time()
+            time0_set = True
+        line += str(' time: ')
+        line += str(time.time() - time0)
         print(line)
     
         raw.write(f"{line}\n")
@@ -58,7 +68,15 @@ if dev:
 else:
     while running:
         line = ser.readline()[:-2].decode('utf-8')
+        if callibrated ==False:
+            pass
+        if time0_set == False:
+            time0 = time.time()
+            time0_set = True
+        line += str(' time: ')
+        line += str(time.time() - time0)
         print(line)
+        
         
         ####################
         ###YOUR CODE HERE###
