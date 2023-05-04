@@ -23,16 +23,6 @@ testload = 0
 dev = True              # Development mode
 usbPort = "editMe"      # Your USB port, obtain using port_scan()
 
-def convertedLoad(line):
-    if callibrated == False:
-        if input("press 1 when no load is applied") == 1:
-            r0 = parse(line)[0]
-            testload = input("Apply load to sensor and enter how much (N).")
-            callibrated = True
-    kgperr = testload / (parse(line)[0] - r0)
-    return [kgperr-r0 , parse(line)[1]]
-           
-
 def calcDist(tof):
     return 0.5*299792458*tof/1000
 
@@ -71,23 +61,33 @@ if dev:
             time0_set = True
         line += str(' time: ')
         line += str(time.time() - time0)
-        print(convertedLoad(line))
+        print(line)
     
         raw.write(f"{line}\n")
-        csvwriter.writerow(convertedLoad(line))
+        csvwriter.writerow(parse(line))
         
 
 else:
     while running:
+
+        if callibrated == False:
+            if input("press 1 when no load is applied") == 1:
+                r0 = parse(line)[0] # sensor value when no load is applied
+                testload = input("Apply load to sensor and enter how much (N).")
+                line = ser.readline()[:-2].decode('utf-8')
+                kgperr = testload / (parse(line)[0] - r0) # the loading in kg that one lil sensor value is worth
+                callibrated = True 
+
         line = ser.readline()[:-2].decode('utf-8')
         if time0_set == False:
             time0 = time.time()
             time0_set = True
         line += str(' time: ')
         line += str(time.time() - time0)
-        print(convertedLoad(line))
-        csvwriter.writerow(convertedLoad(line))
+        load = 9.81(kgperr*parse(line)[0] - r0) # in newton
+        csvwriter.writerow([load , parse(line)[1]])
         
         ####################
         ###YOUR CODE HERE###
         ####################
+#print("Readyyyyyyyyyyyy")
