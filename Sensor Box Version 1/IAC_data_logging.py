@@ -20,7 +20,7 @@ callibrated = False
 kgperr = 0
 r0 = 0
 testload = 0
-dev = True              # Development mode
+dev = False              # Development mode
 usbPort = "editMe"      # Your USB port, obtain using port_scan()
 
 def calcDist(tof):
@@ -68,7 +68,7 @@ if dev:
         
 
 else:
-    while running:
+    while True:
 
         if callibrated == False:
             if input("press 1 when no load is applied") == 1:
@@ -85,7 +85,7 @@ else:
         line += str(' time: ')
         line += str(time.time() - time0)
         load = 9.81(kgperr*parse(line)[0] - r0) # in newton
-        csvwriter.writerow([load , parse(line)[1]])
+        csvwriter.writerow([load , parse(line)])
         
         ####################
         ###YOUR CODE HERE###
