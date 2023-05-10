@@ -2,11 +2,15 @@
 from cedargrove_nau7802 import NAU7802
 import adafruit_vl53l0x
 import time
-import busio
-import board
 import os
 os.environ["BLINKA_MCP2221"] = "1"
 os.environ["BLINKA_MCP2221_RESET_DELAY"] = "-1"
+
+import busio
+import board
+
+
+
 
 
 # Load cell

@@ -6,6 +6,8 @@ import time
 import busio
 import board
 import os
+from fileHandler import initWrite
+
 os.environ["BLINKA_MCP2221"] = "1"
 os.environ["BLINKA_MCP2221_RESET_DELAY"] = "-1"
 
@@ -17,11 +19,13 @@ loadCelSensor = NAU7802(board.I2C(), address=0x2a, active_channels=1)
 i2c = busio.I2C(board.SCL, board.SDA)
 tofSensor = adafruit_vl53l0x.VL53L0X(i2c)
 
-
+calibrated = False
 kgperr = 0
 testload = 0
 r0 = 0
 load = 0
+t = 0
+raw, csv = initWrite(False, "output")
 
 print("Starting measurements. \n")
 
@@ -29,27 +33,32 @@ print("Starting measurements. \n")
 try:
     while True:
         # Get sensor readings
-        loadCellValue = loadCelSensor.read()
+
         tofValue = tofSensor.range
-        """
-        if callibrated == False:
-            if input("press 1 when no load is applied") == 1:
-                r0 = loadCellValue  # sensor value when no load is applied
-                testload = input(
-                    "Apply load to sensor and enter how much (N).")
+        
+        if calibrated == False:
+            if input("press 1 when no load is applied") == "1":
+                r0 = loadCelSensor.read()  # sensor value when no load is applied
+                testload = float(input(
+                    "Apply load to sensor and enter how much (kg)."))*9.81
                 # the loading in kg that one lil sensor value is worth
-                kgperr = testload / loadCelSensor.read()
-                callibrated = True
+                kgperr = testload / (loadCelSensor.read()-r0)
+                calibrated = True
+                t=0
+            else:
+                print("Incorrect key")
 
-        load = 9.81(kgperr*loadCelSensor.read() - r0)  # in newton
-        """
-    # Output sensor data
-    print("Load cell: {:.0f}, Distance: {:.0f}".format(
-        loadCellValue, tofValue))
-    # print("Load cell: {:.0f}".format(loadCellValue))
-
-    # Sleep
-    time.sleep(1)
+        loadCellValue = loadCelSensor.read()
+        load = (loadCellValue-r0)*kgperr  # in newton
+        
+        # Output sensor data
+        print(f"Time: {t}, Load cell: {loadCellValue}, Distance: {tofValue}, Load: {load}")
+        # print("Load cell: {:.0f}".format(loadCellValue))
+        raw.write(f"Time: {t}, Load cell: {loadCellValue}, Distance: {tofValue}, Load: {load}\n")
+        csv.writerow([t, loadCellValue, tofValue, load])
+        # Sleep
+        time.sleep(1)
+        t=t+1
 
 # Exit
 except KeyboardInterrupt:

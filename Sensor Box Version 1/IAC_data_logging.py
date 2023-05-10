@@ -9,9 +9,6 @@ You can enable a "development" mode which will feed fake data
 """
 import time
 import serial
-import csv
-import os
-import time
 from IAC_helper import port_scan, development_data
 from fileHandler import initWrite
 
@@ -22,6 +19,8 @@ r0 = 0
 testload = 0
 dev = False              # Development mode
 usbPort = "editMe"      # Your USB port, obtain using port_scan()
+
+raw, csv = initWrite(False, "output")
 
 def calcDist(tof):
     return 0.5*299792458*tof/1000
@@ -85,7 +84,7 @@ else:
         line += str(' time: ')
         line += str(time.time() - time0)
         load = 9.81(kgperr*parse(line)[0] - r0) # in newton
-        csvwriter.writerow([load , parse(line)])
+        csv.writerow([load , parse(line)])
         
         ####################
         ###YOUR CODE HERE###
