@@ -1,0 +1,5 @@
+0 - empty
+1 - random, try if it works
+2 - initial state, input 1 kg
+3 failed cal 5 kg
+4 - proper data

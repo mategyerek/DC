@@ -1,0 +1,7 @@
+Time: 0, Load cell: -411370.0, Distance: 8191, Load: 98.08976739334516
+Time: 1, Load cell: -414496.0, Distance: 8191, Load: 114.08333159486806
+Time: 2, Load cell: -420778.0, Distance: 8191, Load: 146.22394909773652
+Time: 3, Load cell: -427636.0, Distance: 8191, Load: 181.3115573172004
+Time: 4, Load cell: -417762.0, Distance: 8191, Load: 130.7931782622301
+Time: 5, Load cell: -428492.0, Distance: 8190, Load: 185.6911129654741
+Time: 6, Load cell: -415726.0, Distance: 8190, Load: 120.37638468759779

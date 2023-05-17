@@ -1,0 +1,11 @@
+Time: 0, Load cell: -363058.0, Distance: 169, Load: 9.911134020618558
+Time: 1, Load cell: -362736.0, Distance: 165, Load: 26.19371134020619
+Time: 2, Load cell: -362898.0, Distance: 160, Load: 18.001855670103094
+Time: 3, Load cell: -362736.0, Distance: 163, Load: 26.19371134020619
+Time: 4, Load cell: -362930.0, Distance: 162, Load: 16.383711340206187
+Time: 5, Load cell: -362704.0, Distance: 159, Load: 27.811855670103096
+Time: 6, Load cell: -362714.0, Distance: 162, Load: 27.306185567010314
+Time: 7, Load cell: -362756.0, Distance: 160, Load: 25.18237113402062
+Time: 8, Load cell: -362602.0, Distance: 159, Load: 32.969690721649485
+Time: 9, Load cell: -362604.0, Distance: 163, Load: 32.86855670103093
+Time: 10, Load cell: -362226.0, Distance: 155, Load: 51.98288659793815
